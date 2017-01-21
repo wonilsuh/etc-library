@@ -7,7 +7,11 @@ When certain libraries or data are loaded asynchronously, your script that uses 
 ```
 <script>
 
-/* Let's say, we are waiting for window.dataContainer.asyncData to be populated. When it's fianlly populated, we want to run processData() function.
+/* 
+
+Let's say, we are waiting for window.dataContainer.asyncData to be populated. When it's fianlly populated, we want to run processData() function. 
+
+*/
 
 // prepare the parent object.
 window.dataContainer = {};
@@ -18,7 +22,12 @@ function processData(data){
 }
 
 // add a waiter, which will start the interval interval
-window.jsObjectWaiter.addWaiter('asyncData', processData, window.dataContainer);
+window.jsObjectWaiter.addWaiter(
+	'asyncData', // the name of the object to wait for
+	processData, // callback function
+	window.dataContainer, // parent container.
+	10000 // timeout. this is set individually.
+);
 
 </script>
 ```
