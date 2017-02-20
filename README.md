@@ -3,13 +3,17 @@ Various scripts
 
 ## url parameter
 
-```getURLParameter(parameter_name)```
+```
+function getURLParameter(parameter_name):string
+```
 
 As the name suggests, this function grabs parameter value for the passed name.
 
 ## object waiter
 
-```jsObjectWaiter:object```
+```
+jsObjectWaiter:object
+```
 
 Refer to [readme](./js-object-waiter/README.md)
 
@@ -17,6 +21,8 @@ Refer to [readme](./js-object-waiter/README.md)
 
 This is a collection of math related methods
 
-```getClosestAnglePath(newAngle, oldAngle)```
+```
+getClosestAnglePath(newAngle, oldAngle):float
+```
 
 Refer to a demo page at [codepen.io](http://codepen.io/wonilsuh/pen/JEQEzY)
