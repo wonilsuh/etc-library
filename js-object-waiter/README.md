@@ -7,27 +7,15 @@ When certain libraries or data are loaded asynchronously, your script that uses 
 ```
 <script>
 
-/* 
+var k = ['k0', 'k1'];
 
-Let's say, we are waiting for window.dataContainer.asyncData to be populated. When it's fianlly populated, we want to run processData() function. 
+jsObjectWaiter.addWaiter(k, function(waiter){console.log('done!')});
 
-*/
-
-// prepare the parent object.
-window.dataContainer = {};
-
-// define the callback function
-function processData(data){
-    console.log(data);
-}
-
-// add a waiter, which will start the interval interval
-window.jsObjectWaiter.addWaiter(
-	'asyncData', // the name of the object to wait for
-	processData, // callback function
-	window.dataContainer, // parent container.
-	10000 // timeout. this is set individually.
-);
+setTimeout(function(){
+	window.k0 = {
+		k1:{}
+	}
+},2000);
 
 </script>
 ```

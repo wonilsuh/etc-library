@@ -5,51 +5,64 @@
 (function(){
 
 	window.jsObjectWaiter = (function(app){
-		console.log('jsObjectWaiter!!!');
+		// console.log('jsObjectWaiter!!!');
 
 		app.waiters = [];
 
-		app.addWaiter = function(objectName, callback, objectScope, timeout){
-			console.log('jsObjectWaiter.addWaiter...');
+		app.addWaiter = function(keys, callback, timeout){
+			// console.log('jsObjectWaiter.addWaiter...');
 
 			app.waiters.push({
 				callback:callback,
-				objectName:objectName,
-				objectScope:objectScope,
+				keys:keys,
 				timeout:timeout,
-				startTime:Date.now()
+				startTime:Date.now(),
+				state:false
 			});
 
 			app.startInterval();
 		};
 
 		app.startInterval = function(){
-			console.log('jsObjectWaiter.startInterval...number of waiters == ' + app.waiters.length);
+			// console.log('jsObjectWaiter.startInterval...number of waiters == ' + app.waiters.length);
 
 			if(app.waiters.length >0){
 				app.stopInterval();
 				app.intervalId = setInterval(function(){
-					console.log('jsObjectWaiter:interval...');
+					// console.log('jsObjectWaiter:interval...');
 
 					app.waiters = app.waiters.filter(function(waiter, waiterI){
+						
+						if(waiter.state !== true){
+							var prev = window;
+							var goodToGo = true;
 
-						if( typeof( (waiter.objectScope || window)[waiter.objectName]) !== 'undefined' ){
-							waiter.callback((waiter.objectScope || window)[waiter.objectName]);
-							return false;
-						}else if(typeof(waiter.timeout) !== undefined && Date.now() > waiter.startTime + waiter.timeout) {
-							return false;
-						}else{
-							return true;
+							waiter.keys.forEach(function(key, i){
+								if(goodToGo === true){
+									goodToGo = goodToGo && (typeof(prev[key]) !== 'undefined');
+									prev = prev[key];
+								}
+							});
+
+							console.log('goodToGo==='+goodToGo);
+
+							if( goodToGo === true ){
+								waiter.callback(waiter);
+								return false;
+							}else if(typeof(waiter.timeout) !== undefined && Date.now() > waiter.startTime + waiter.timeout) {
+								return false;
+							}else{
+								return true;
+							}
 						}
 					});
-
 					if(app.waiters.length === 0) app.stopInterval();
 				},500);
 			}
 		}
 
 		app.stopInterval = function(){
-			console.log('jsObjectWaiter.stopInterval...');
+			// console.log('jsObjectWaiter.stopInterval...');
 			clearInterval(app.intervalId);
 		}
 
